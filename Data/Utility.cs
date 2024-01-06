@@ -1,13 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Bislerium.Data
 {
     public class Utility
+
+    /* Unmerged change from project 'Bislerium (net8.0-maccatalyst)'
+    Before:
+        {
+
+            public static string HasdPassword(string password)
+    After:
+        {
+
+            public static string HasdPassword(string password)
+    */
+
+    /* Unmerged change from project 'Bislerium (net8.0-ios)'
+    Before:
+        {
+
+            public static string HasdPassword(string password)
+    After:
+        {
+
+            public static string HasdPassword(string password)
+    */
+
+    /* Unmerged change from project 'Bislerium (net8.0-android)'
+    Before:
+        {
+
+            public static string HasdPassword(string password)
+    After:
+        {
+
+            public static string HasdPassword(string password)
+    */
     {
 
         public static string HasdPassword(string password)
@@ -27,6 +56,22 @@ namespace Bislerium.Data
         public static string GetAppUsersFilePath()
         {
             return Path.Combine(GetAppDirectoryPath(), "Users.json");
+        }
+        public static string GetAppCoffeeFilePath()
+        {
+            return Path.Combine(GetAppDirectoryPath(), "Coffee.json");
+        }
+        public static string GetAppAddInsFilePath()
+        {
+            return Path.Combine(GetAppDirectoryPath(), "AddIns.json");
+        }
+        public static string GetAppCustomerFilePath()
+        {
+            return Path.Combine(GetAppDirectoryPath(), "Customers.json");
+        }
+        public static string GetAppOrderFilePath()
+        {
+            return Path.Combine(GetAppDirectoryPath(), "Orders.json");
         }
         public static void DeleteUsersFile()
         {

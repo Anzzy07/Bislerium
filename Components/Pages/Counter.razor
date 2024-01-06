@@ -1,17 +1,16 @@
 ﻿@page "/counter"
 
-<div class="container">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form">
-        Add Users
-    </button>
-</div>
+<h1>Counter</h1>
 
-<table id="myTable" class="display">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    </table>
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
