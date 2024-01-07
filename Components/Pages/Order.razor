@@ -13,20 +13,19 @@
     <thead>
         <tr>
             <th style="width: 10%; white-space: nowrap;">Customer Name</th>
-            <th style ="width: 10%; white-space: nowrap;">Customer No.</th>
-            <th>Coffee</th>
+            <th style="width: 10%; white-space: nowrap;">Customer No.</th>
+            <th style="width: 10%; white-space: nowrap;">Coffee</th>
             <th style="width: 10%; white-space: nowrap;">Add-Ins</th>
-            <th>Dis</th>
+            <th style="width: 10%; white-space: nowrap;">Discount</th>
             <th style="width: 10%; white-space: nowrap;">Coffee Price</th>
             <th style="width: 10%; white-space: nowrap;">AddIns Price</th>
-           
             <th style="width: 10%; white-space: nowrap;">Created At</th>
             @* <th>CreatedBy</th> *@
             @* <th>Actions</th> *@
         </tr>
     </thead>
     <tbody>
-        @foreach(var data in _order)
+        @foreach (var data in _order)
         {
             <tr>
                 <td>@data.CustomerName</td>
@@ -43,12 +42,12 @@
 </table>
 @if (_showAddOrderDialog)
 {
-    <ModalDialog Title="Add User" OnClose="@OnAddOrderDialogClose" OkLabel="Add">
+    <ModalDialog Title="@_dialogTitle" OkLabel="@_dialogOkLabel" OnClose="@OnAddOrderDialogClose">
         <form>
-            
+
             <div class="form-floating mb-1">
-                <select class="form-select" @onchange="CoffCalculate" >
-                    <option selected >select Coffee</option>
+                <select class="form-select" @onchange="CoffCalculate">
+                    <option selected>select Coffee</option>
                     @foreach (var c in _coffee)
                     {
                         <option>@c.Name</option>
@@ -57,7 +56,7 @@
                 <label for="floatingPassword">Coffee</label>
             </div>
             <div class="form-floating mb-1">
-                <select class="form-select" @onchange="AddInCalculate" >
+                <select class="form-select" @onchange="AddInCalculate">
                     <option selected>select Add-Ins</option>
                     @foreach (var c in _addins)
                     {
@@ -78,16 +77,16 @@
                 <label for="floatingInput">Customer</label>
             </div>
             <div style="text-align:right;">
-               <label>Coffee Price: @CoffCal</label><br>
-               <label>Add-Ins Price: @AddInCal</label><br>
-               <label>Discount: @_discount</label><br>
-               <label>Total: @Total</label>
+                <label>Coffee Price: @CoffCal</label><br>
+                <label>Add-Ins Price: @AddInCal</label><br>
+                <label>Discount: @_discount</label><br>
+                <label>Total: @Total</label>
             </div>
-            
 
-            @if (!string.IsNullOrEmpty(_addUserErrorMessage))
+
+            @if (!string.IsNullOrEmpty(_addOrderErrorMessage))
             {
-                <AlertMessage Type="danger" Message="@_addUserErrorMessage" />
+                <AlertMessage Type="danger" Message="@_addOrderErrorMessage" />
             }
 
         </form>
@@ -104,7 +103,7 @@
     private GlobalState _globalState { get; set; }
     private bool _showAddOrderDialog { get; set; }
     private List<Coffees> _coffee { get; set; }
-    private string _addUserErrorMessage { get; set; }
+    private string _addOrderErrorMessage { get; set; }
     private string _dialogTitle { get; set; }
     private string _dialogOkLabel { get; set; }
     private List<Customers> _customer { get; set; }
@@ -116,12 +115,14 @@
     int Count = 0;
     protected override void OnInitialized()
     {
-        _order =OrderService.GetAll();
+        _order = OrderService.GetAll();
 
 
     }
     private void OpenAddCoffeeDialog()
     {
+        _dialogTitle = "Add Order";
+        _dialogOkLabel = "Add";
         _showAddOrderDialog = true;
 
         _id = null;
@@ -141,7 +142,7 @@
         {
             try
             {
-                _addUserErrorMessage = "";
+                _addOrderErrorMessage = "";
                 if (!string.IsNullOrEmpty(_cusName) && !string.IsNullOrEmpty(_coffName.ToString()))
                 {
                     List<Orders> ord = OrderService.GetAll();
@@ -202,17 +203,15 @@
             }
             catch (Exception e)
             {
-                _addUserErrorMessage = e.Message;
+                _addOrderErrorMessage = e.Message;
             }
         }
     }
 
     private void OpenEditOrderDialog(Coffees coff)
     {
-        _dialogTitle = "Edit Todo";
-        _dialogOkLabel = "Save";
-        // _name = coff.Name;
-        // _price =coff.Price;
+        _dialogTitle = "Edit Order";
+        _dialogOkLabel = "Update";
         _id = coff.Id;
 
         _showAddOrderDialog = true;
@@ -239,9 +238,9 @@
             _coffee = CoffeeService.GetAll();
 
         }
-        catch
+        catch (Exception e)
         {
-
+            _addOrderErrorMessage = e.Message;
         }
 
 
@@ -257,7 +256,7 @@
         _cusName = c.Name;
         _status = c.Status;
         decimal Sum = CoffCal + AddInCal;
-        if(o == 10)
+        if (o == 10)
         {
             _discount = "free";
             Total = 0;
@@ -276,7 +275,7 @@
                 Total = Sum;
             }
         }
-        
+
 
 
     }
@@ -290,7 +289,7 @@
         {
             decimal price = Convert.ToDecimal(data.Price);
             CoffCal = price;
-            
+
         }
 
 
@@ -305,7 +304,7 @@
         {
             decimal price = Convert.ToDecimal(data.Price);
             AddInCal = price;
-            
+
         }
     }
 }
