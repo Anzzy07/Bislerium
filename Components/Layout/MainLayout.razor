@@ -21,7 +21,7 @@
 </div>
 
 @code {
-    private GlobalState _globalState = new();
+    private GlobalState _globalState = new();    //Login Procedures
 
     protected override void OnInitialized()
     {
@@ -31,6 +31,6 @@
     private void LogoutHandler()
     {
         _globalState.CurrentUser = null;
-        NavManager.NavigateTo("/login");
+        NavManager.NavigateTo("/login");     /*If the code is executed login page is directed */
     }
 }

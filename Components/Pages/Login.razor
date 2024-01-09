@@ -2,7 +2,7 @@
 @using Bislerium.Data
 @inject NavigationManager NavManager
 
-<style>
+<style>           /* Styles for login */
     body {
         font-family: 'Arial', sans-serif;
         margin: 0;
@@ -102,11 +102,11 @@
                 if (hashedPassword == user.Password)
                 {
                     _globalState.CurrentUser = user;
-                    NavManager.NavigateTo("/customerorder");
+                    NavManager.NavigateTo("/customerorder");          //Redirect to Customer order page
                 }
                 else
                 {
-                    throw new Exception("Invalid Password");
+                    throw new Exception("Invalid Password");     //Throw Errors
                 }
             }
             else

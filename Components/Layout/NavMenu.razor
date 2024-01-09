@@ -20,7 +20,7 @@
     <nav class="flex-column">
         <div class="nav-item-custom">
             <NavLink class="nav-link" href="customers" style="color: lawngreen;">
-                <span class="bi bi-person-fill" style="color: white;"></span> Customer
+                <span class="bi bi-person-fill" style="color: white;"></span> Customer         @*  Shown only for Staff *@
             </NavLink>
         </div>
         <div class="nav-item-custom">
@@ -28,7 +28,7 @@
                 <span class="bi bi-clipboard2-check-fill" style="color: white;"></span>Order
             </NavLink>
         </div>
-        @if (UserRole.ToString() == "Admin")
+        @if (UserRole.ToString() == "Admin")    // Admin Can View Navigation
         {
             <div class="nav-item-custom">
                 <NavLink class="nav-link" href="users" style="color: lawngreen;">
@@ -60,7 +60,7 @@
     [Parameter]
     public Role UserRole { get; set; }
     [Parameter]
-    public EventCallback LogoutHandler { get; set; }
+    public EventCallback LogoutHandler { get; set; }    // EventCall back for logout
 
     private bool _collapseNavMenu { get; set; } = true;
 

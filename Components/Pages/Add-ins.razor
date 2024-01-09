@@ -3,7 +3,7 @@
 @using System.Text.Json
 
 
-<nav class="navbar navbar-light bg-light justify-content-between">
+<nav class="navbar navbar-light bg-light justify-content-between">   
     <h1 class="navbar-brand mb-0 h1">Add-Ins</h1>
     <button class="btn btn-primary" type="button" @onclick="OpenAddinsDialog">
         <span class="oi oi-plus" /> Add
@@ -12,7 +12,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Name</th>     @* Table Headers *@
             <th>Price</th>
             <th>Created At</th>
             <th>Actions</th>
@@ -95,7 +95,7 @@
             try
             {
                 _addAddInsErrorMessage = "";
-                if (!string.IsNullOrEmpty(_name) && !string.IsNullOrEmpty(_price.ToString()))
+                if (!string.IsNullOrEmpty(_name) && !string.IsNullOrEmpty(_price.ToString()))   /* Add Addins */
                 {
                     List<AddIns> addin = AddInsService.GetAll();
                     if (string.IsNullOrEmpty(_id.ToString()))
@@ -113,7 +113,7 @@
                     }
                     else
                     {
-                        AddIns c = addin.FirstOrDefault(x => x.Id == _id);
+                        AddIns c = addin.FirstOrDefault(x => x.Id == _id);     /* Exception Thrown */
                         if (c == null)
                         {
                             throw new Exception("Coffee not found.");
@@ -146,7 +146,7 @@
         }
     }
 
-    private void OpenEditAddInsDialog(AddIns ad)
+    private void OpenEditAddInsDialog(AddIns ad)    //Addins Update
     {
         _dialogTitle = "Edit AddIns";
         _dialogOkLabel = "Update";
@@ -156,7 +156,7 @@
 
         _showAddCofeeDialog = true;
     }
-    private void OpenDeleteAddInsDialog(AddIns a)
+    private void OpenDeleteAddInsDialog(AddIns a)   //Using List
     {
         try
         {

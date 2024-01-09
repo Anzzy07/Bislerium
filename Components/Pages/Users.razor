@@ -11,7 +11,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Username</th>
+            <th>Username</th>     @*  Table Head for Users Page *@
             <th>Role</th>
             <th>Created At</th>
             <th>Actions</th>
@@ -25,7 +25,7 @@
                 <td>@user.role.ToString()</td>
                 <td>@user.CreatedAt.ToShortDateString()</td>
                 <td>
-                    @if (user.Username == "admin")
+                    @if (user.Username == "admin")       //Role Admin
                     {
                         <button class="btn btn-outline-danger" type="button" disabled>
                             <span class="oi oi-delete" /> Delete
@@ -56,11 +56,11 @@
                 <label for="floatingPassword">Password</label>
             </div>
             <div class="form-floating mb-3">
-                <select @bind="_role" class="form-select">
+                <select @bind="_role" class="form-select">    @* Select Role *@
                     <option>@Role.Admin</option>
                     <option>@Role.Staff</option>
                 </select>
-                <label for="Role">Role</label>
+                <label for="Role">Role</label>   
             </div>
 
         </form>
@@ -92,7 +92,7 @@
         _showAddUserDialog = true;
 
     }
-    private void OnAddUserDialogClose(bool isCancel)
+    private void OnAddUserDialogClose(bool isCancel)    // Exception Handling
     {
         if (isCancel)
         {
@@ -105,7 +105,7 @@
             {
                 if (!string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password))
                 {
-                    List<User> user = UserService.GetAll();
+                    List<User> user = UserService.GetAll();    //Data Structure (LIST)
                     user.Add(
                         new User
                             {
@@ -138,7 +138,7 @@
         }
 
     }
-    private void OpenDeleteUserDialog(User u)
+    private void OpenDeleteUserDialog(User u)     //Try Catch Method for Event Handling
     {
         try
         {

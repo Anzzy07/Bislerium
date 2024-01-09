@@ -12,7 +12,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Name</th>                  @* Customer Table *@
             <th>Number</th>
             <th>Status</th>
             <th>Created At</th>
@@ -42,7 +42,7 @@
 </table>
 @if (_showAddCustomerDialog)
 {
-    <ModalDialog Title="@_dialogTitle" OkLabel="@_dialogOkLabel" OnClose="@OnAddCustomerDialogClose">
+    <ModalDialog Title="@_dialogTitle" OkLabel="@_dialogOkLabel" OnClose="@OnAddCustomerDialogClose">    @* Modal Screen for Adding Customer *@
         <form>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control " @bind="_name" placeholder="Name" />
@@ -86,7 +86,7 @@
     }
     private void OpenAddCustomerDialog()
     {
-        _dialogTitle = "Add Customer";
+        _dialogTitle = "Add Customer";        //Adding Customer
         _dialogOkLabel = "Add";
         _showAddCustomerDialog = true;
         _name = "";
@@ -109,7 +109,7 @@
                 if (!string.IsNullOrEmpty(_name) && !string.IsNullOrEmpty(_number.ToString()) && !string.IsNullOrEmpty(_status.ToString()))
                 {
                     List<Customers> cus = CustomerService.GetAll();
-                    Customers checkNumb = cus.FirstOrDefault(x => x.Number == _number);
+                    Customers checkNumb = cus.FirstOrDefault(x => x.Number == _number);     //Number of Customer Validation
 
                     if (string.IsNullOrEmpty(_id.ToString()))
                     {
@@ -141,19 +141,19 @@
                         c.Number = _number;
                         c.Status = _status;
                     }
-                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))
+                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))    //Importing from utilty.cs file
                     {
                         Directory.CreateDirectory(Utility.GetAppDirectoryPath());
                     }
 
                     var json = JsonSerializer.Serialize(cus);
-                    File.WriteAllText(Utility.GetAppCustomerFilePath(), json);
+                    File.WriteAllText(Utility.GetAppCustomerFilePath(), json);    //JSON File for Customer
                     _customer = CustomerService.GetAll();
                     _showAddCustomerDialog = false;
                 }
                 else
                 {
-                    throw new Exception("name or Number or status are empty");
+                    throw new Exception("name or Number or status are empty");     //If condition does't meet
                 }
 
 
@@ -166,7 +166,7 @@
         }
     }
 
-    private void OpenEditCustomerDialog(Customers cus)
+    private void OpenEditCustomerDialog(Customers cus)      //Edit Method
     {
         _dialogTitle = "Edit Customer";
         _dialogOkLabel = "Update";
@@ -181,7 +181,7 @@
     {
         try
         {
-            List<Customers> ad = CustomerService.GetAll();
+            List<Customers> ad = CustomerService.GetAll();     /* Delete Method */
             _id = a.Id;
             Customers c = ad.FirstOrDefault(x => x.Id == _id);
             if (c == null)

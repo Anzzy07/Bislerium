@@ -41,7 +41,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th style="width: 10%; white-space: nowrap;">Customer Name</th>
+            <th style="width: 10%; white-space: nowrap;">Customer Name</th>     @* Table for orders with styling *@
             <th style="width: 10%; white-space: nowrap;">Customer No.</th>
             <th style="width: 10%; white-space: nowrap;">Coffee</th>
             <th style="width: 10%; white-space: nowrap;">Add-Ins</th>
@@ -56,7 +56,7 @@
         @foreach (var data in _order)
         {
             <tr>
-                <td>@data.CustomerName</td>
+                <td>@data.CustomerName</td>      @* Data for orders *@
                 <td>@data.CustomerNumber</td>
                 <td>@data.CoffeeName</td>
                 <td>@data.AddInsName</td>
@@ -94,7 +94,6 @@
                 <label for="floatingPassword">Add-Ins</label>
             </div>
             <div class="form-floating mb-3">
-                @* <input type="text" class="form-control " @bind="_name" placeholder="Name" /> *@
                 <select class="form-select" @onchange="CustomerCalculate">
                     <option selected>select customer</option>
                     @foreach (var c in _customer)
@@ -114,14 +113,14 @@
 
             @if (!string.IsNullOrEmpty(_addOrderErrorMessage))
             {
-                <AlertMessage Type="danger" Message="@_addOrderErrorMessage" />
+                <AlertMessage Type="danger" Message="@_addOrderErrorMessage" />   //Throw error message
             }
 
         </form>
     </ModalDialog>
 }
 <script>
-    window.saveAsFile = function (fileName, byteBase64, contentType) {
+    window.saveAsFile = function (fileName, byteBase64, contentType) {    //Generate PDF and exception handled
         try {
             const link = document.createElement('a');
             link.href = `data:${contentType};base64,${byteBase64}`;
@@ -164,7 +163,7 @@
 
     }
 
-    private async Task GeneratePDF()
+    private async Task GeneratePDF()      // PDF Generator
     {
         List<Orders> cus = OrderService.GetAll();
         decimal revnue = 0;
@@ -184,10 +183,10 @@
                     PdfWriter.GetInstance(document, memoryStream);
                     document.Open();
 
-                    // Create a table in the PDF and add data based on the fetched orders
-                    PdfPTable table = new PdfPTable(6); // Assuming 5 columns for demonstration
+                    // Table in the PDF 
+                    PdfPTable table = new PdfPTable(6); // Total 6 Column
 
-                    // Add headers to the table
+                    // Headers to the table
                     table.AddCell("Customer Name");
                     table.AddCell("Customer Number");
                     table.AddCell("Coffee");
@@ -196,16 +195,16 @@
                     table.AddCell("Date");
 
 
-                    // Add data rows for each order in customerDate list
+                    // Rows for each order in customerDate list
                     foreach (var order in customerDate)
                     {
-                        revnue = revnue + Convert.ToDecimal(order.TotalPrice);
-                        table.AddCell(order.CustomerName); // Replace with actual properties from Orders
-                        table.AddCell(order.CustomerNumber.ToString()); // Replace with actual properties from Orders
-                        table.AddCell(order.CoffeeName); // Replace with actual properties from Orders
-                        table.AddCell(order.AddInsName); // Replace with actual properties from Orders
-                        table.AddCell(order.TotalPrice); // Replace with actual properties from Orders
-                        table.AddCell(order.CreatedAt.ToString("dd/mm/yyyy")); // Replace with actual properties from Orders
+                        revnue = revnue + Convert.ToDecimal(order.TotalPrice);    //Properties to print in PDF
+                        table.AddCell(order.CustomerName); 
+                        table.AddCell(order.CustomerNumber.ToString()); 
+                        table.AddCell(order.CoffeeName); 
+                        table.AddCell(order.AddInsName); 
+                        table.AddCell(order.TotalPrice); 
+                        table.AddCell(order.CreatedAt.ToString("dd/mm/yyyy")); 
                     }
                     table.AddCell("");
                     table.AddCell("Revnue");
@@ -227,7 +226,7 @@
             }
             else
             {
-                throw new Exception("There is no any data");
+                throw new Exception("There is no any data");    //Exception thrown if no date is imput
             }
         }
         catch (Exception e)
@@ -266,7 +265,7 @@
         Descending
     }
 
-    private void BubbleSort()
+    private void BubbleSort()    //Bubble sort 
     {
         List<Orders> cus = OrderService.GetAll();
 
@@ -295,7 +294,7 @@
 
     }
 
-    private void OpenAddCoffeeDialog()
+    private void OpenAddCoffeeDialog()    //Add Orders
     {
         _dialogTitle = "Add Order";
         _dialogOkLabel = "Add";
@@ -321,7 +320,7 @@
             try
             {
                 _addOrderErrorMessage = "";
-                if (!string.IsNullOrEmpty(_cusName) && !string.IsNullOrEmpty(_coffName.ToString()))
+                if (!string.IsNullOrEmpty(_cusName) && !string.IsNullOrEmpty(_coffName.ToString()))    //Display Customer data
                 {
                     List<Orders> ord = OrderService.GetAll();
                     if (string.IsNullOrEmpty(_id.ToString()))
@@ -353,13 +352,13 @@
                         // c.Name = _name;
                         // c.Price = _price;
                     }
-                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))
+                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))       //using Utility Service
                     {
                         Directory.CreateDirectory(Utility.GetAppDirectoryPath());
                     }
 
                     var json = JsonSerializer.Serialize(ord);
-                    File.WriteAllText(Utility.GetAppOrderFilePath(), json);
+                    File.WriteAllText(Utility.GetAppOrderFilePath(), json);    // Read JSON
                     _order = OrderService.GetAll();
                     _showAddOrderDialog = false;
                     CoffCal = 0;
@@ -372,8 +371,8 @@
                     _addInName = "Select AddIns";
                 }
                 else
-                {
-                    throw new Exception("name or price are empty");
+                { 
+                    throw new Exception("name or price are empty");   //Exception Handling
                 }
 
 
@@ -386,7 +385,7 @@
         }
     }
 
-    private void OpenEditOrderDialog(Coffees coff)
+    private void OpenEditOrderDialog(Coffees coff)   // Edit Coffe orders
     {
         _dialogTitle = "Edit Order";
         _dialogOkLabel = "Update";
@@ -424,7 +423,7 @@
 
     }
 
-    private void CustomerCalculate(ChangeEventArgs e)
+    private void CustomerCalculate(ChangeEventArgs e)    //Giving Complementary after purchasing 10 coffee
     {
         _cusNumber = e.Value.ToString().Trim();
         List<Customers> cus = CustomerService.GetAll();
@@ -441,7 +440,7 @@
         }
         else
         {
-            if (_status == "Member")
+            if (_status == "Member")     //Normal Custumer can't have discount
             {
                 _discount = "10%";
                 decimal discountAmount = 10m / 100m;
@@ -472,7 +471,7 @@
 
 
     }
-    private void AddInCalculate(ChangeEventArgs e)
+    private void AddInCalculate(ChangeEventArgs e)     //Calculation of Price
     {
         _addInName = e.Value.ToString().Trim();
         List<AddIns> a = AddInsService.GetAll();
