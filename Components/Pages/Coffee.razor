@@ -25,7 +25,6 @@
                 <td>@data.Name</td>
                 <td>@data.Price</td>
                 <td>@data.CreatedAt.ToShortDateString()</td>
-                @* <td>@data.CreatedBy</td> *@
                 <td>
                     <button class="btn btn-outline-secondary" type="button"
                             @onclick="()=>OpenEditCoffeeDialog(data)">
@@ -55,7 +54,6 @@
             {
                 <AlertMessage Type="danger" Message="@_addCoffErrorMessage" />
             }
-
         </form>
     </ModalDialog>
 }

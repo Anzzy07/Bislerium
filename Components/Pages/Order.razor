@@ -17,7 +17,6 @@
     </button>
 </nav>
 <div class="d-flex flex-row align-items-center mb-3">
-    <!-- Sort Dropdown -->
     <div class="dropdown me-2">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Sort
@@ -28,13 +27,8 @@
         </ul>
     </div>
 
-    <!-- Search Input -->
     <input type="text" @oninput="SearchTaskName" class="form-control me-2" placeholder="Search..." style="width: auto;" />
-
-    <!-- Date Picker -->
     <input type="date" @bind="_date" class="form-control me-2" style="width: auto;" />
-
-    <!-- PDF Generate Button -->
     <button class="btn btn-outline-success" @onclick="GeneratePDF">PDF Generate</button>
 </div>
 
@@ -75,7 +69,7 @@
 
             <div class="form-floating mb-1">
                 <select class="form-select" @onchange="CoffCalculate">
-                    <option selected>select Coffee</option>
+                    <option selected>Select Coffee</option>
                     @foreach (var c in _coffee)
                     {
                         <option>@c.Name</option>
@@ -85,7 +79,7 @@
             </div>
             <div class="form-floating mb-1">
                 <select class="form-select" @onchange="AddInCalculate">
-                    <option selected>select Add-Ins</option>
+                    <option selected>Select Add-Ins</option>
                     @foreach (var c in _addins)
                     {
                         <option>@c.Name</option>
@@ -94,7 +88,6 @@
                 <label for="floatingPassword">Add-Ins</label>
             </div>
             <div class="form-floating mb-3">
-                @* <input type="text" class="form-control " @bind="_name" placeholder="Name" /> *@
                 <select class="form-select" @onchange="CustomerCalculate">
                     <option selected>select customer</option>
                     @foreach (var c in _customer)
@@ -166,8 +159,6 @@
     private async Task GeneratePDF()
     {
         List<Orders> cus = OrderService.GetAll();
-
-        // Filter orders for the specified date (_date)
         List<Orders> customerDate = cus.Where(x =>
      (x.CreatedAt != null && x.CreatedAt.Date.ToString("dd/MM/yyyy") == (_date.HasValue ? _date.Value.Date.ToString("dd/MM/yyyy") : DateTime.Now.Date.ToString("dd/MM/yyyy")))
      ).ToList();
@@ -183,24 +174,21 @@
                     PdfWriter.GetInstance(document, memoryStream);
                     document.Open();
 
-                    // Create a table in the PDF and add data based on the fetched orders
-                    PdfPTable table = new PdfPTable(5); // Assuming 5 columns for demonstration
+                    PdfPTable table = new PdfPTable(5); 
 
-                    // Add headers to the table
                     table.AddCell("Customer Name");
                     table.AddCell("Customer Number");
                     table.AddCell("Coffee");
                     table.AddCell("Add-Ins");
                     table.AddCell("Total");
 
-                    // Add data rows for each order in customerDate list
                     foreach (var order in customerDate)
                     {
-                        table.AddCell(order.CustomerName); // Replace with actual properties from Orders
-                        table.AddCell(order.CustomerNumber.ToString()); // Replace with actual properties from Orders
-                        table.AddCell(order.CoffeeName); // Replace with actual properties from Orders
-                        table.AddCell(order.AddInsName); // Replace with actual properties from Orders
-                        table.AddCell(order.TotalPrice); // Replace with actual properties from Orders
+                        table.AddCell(order.CustomerName); 
+                        table.AddCell(order.CustomerNumber.ToString()); 
+                        table.AddCell(order.CoffeeName); 
+                        table.AddCell(order.AddInsName); 
+                        table.AddCell(order.TotalPrice); 
                     }
 
                     document.Add(table);
