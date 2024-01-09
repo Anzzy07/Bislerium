@@ -16,7 +16,6 @@
             <th>Number</th>
             <th>Status</th>
             <th>Created At</th>
-            @* <th>CreatedBy</th> *@
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,7 +27,6 @@
                 <td>@data.Number</td>
                 <td>@data.Status</td>
                 <td>@data.CreatedAt.ToShortDateString()</td>
-                @* <td>@data.CreatedBy</td> *@
                 <td>
                     <button class="btn btn-outline-secondary" type="button"
                             @onclick="()=>OpenEditCustomerDialog(data)">

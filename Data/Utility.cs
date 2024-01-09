@@ -4,39 +4,6 @@ using System.Text;
 namespace Bislerium.Data
 {
     public class Utility
-
-    /* Unmerged change from project 'Bislerium (net8.0-maccatalyst)'
-    Before:
-        {
-
-            public static string HasdPassword(string password)
-    After:
-        {
-
-            public static string HasdPassword(string password)
-    */
-
-    /* Unmerged change from project 'Bislerium (net8.0-ios)'
-    Before:
-        {
-
-            public static string HasdPassword(string password)
-    After:
-        {
-
-            public static string HasdPassword(string password)
-    */
-
-    /* Unmerged change from project 'Bislerium (net8.0-android)'
-    Before:
-        {
-
-            public static string HasdPassword(string password)
-    After:
-        {
-
-            public static string HasdPassword(string password)
-    */
     {
 
         public static string HasdPassword(string password)
@@ -73,6 +40,7 @@ namespace Bislerium.Data
         {
             return Path.Combine(GetAppDirectoryPath(), "Orders.json");
         }
+
         public static void DeleteUsersFile()
         {
             string filePath = GetAppUsersFilePath();
