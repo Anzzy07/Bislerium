@@ -274,13 +274,13 @@
 
                     // Add top 5 sold coffees
                     List<(string Name, int Count)> topCoffees = GetTop5SoldCoffees();
-                    List<(string Name, int Count)> tC = customerDate.
+                    List<(string Name, int Count)> tC = customerDate.     //Top Coffee in daily basis
                     GroupBy(o => o.CoffeeName)
-            .Select(group => (Name: group.Key, Count: group.Count()))
-            .OrderByDescending(g => g.Count)
-            .Take(5)
+                   .Select(group => (Name: group.Key, Count: group.Count()))
+                   .OrderByDescending(g => g.Count)
+                   .Take(5)
+                   .ToList();
 
-            .ToList();
                     Paragraph topCoffeesHeader = new Paragraph("Top 5 Coffees", fontHeader);
                     document.Add(topCoffeesHeader);
                     foreach (var coffee in tC)
@@ -291,13 +291,13 @@
                     document.Add(new Paragraph(" ")); // Adding a spacer
 
                     // Add top 5 sold add-ins
-                    List<(string Name, int Count)> topAddIns = customerDate
+                    List<(string Name, int Count)> topAddIns = customerDate     //Top Addins in daily basis
 
                     .GroupBy(o => o.AddInsName)
-            .Select(group => (Name: group.Key, Count: group.Count()))
-            .OrderByDescending(g => g.Count)
-            .Take(5)
-            .ToList();
+                    .Select(group => (Name: group.Key, Count: group.Count()))
+                    .OrderByDescending(g => g.Count)
+                    .Take(5)
+                    .ToList();
                     Paragraph topAddInsHeader = new Paragraph("Top 5 Add-Ins", fontHeader);
                     document.Add(topAddInsHeader);
                     foreach (var addIn in topAddIns)
