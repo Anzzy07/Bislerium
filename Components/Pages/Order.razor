@@ -16,7 +16,7 @@
         <span class="oi oi-plus" /> Add
     </button>
 </nav>
-<div class="d-flex flex-row align-items-center mb-3">  
+<div class="d-flex flex-row align-items-center mb-3">
     <!-- Sort Dropdown -->
     <div class="dropdown me-2">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -113,7 +113,8 @@
 
             @if (!string.IsNullOrEmpty(_addOrderErrorMessage))
             {
-                <AlertMessage Type="danger" Message="@_addOrderErrorMessage" />   //Throw error message
+                <AlertMessage Type="danger" Message="@_addOrderErrorMessage" />
+                //Throw error message
             }
 
         </form>
@@ -163,14 +164,36 @@
 
     }
 
-    private async Task GeneratePDF()      // PDF Generator
+    // Method to calulate top 5 most sold  coffee
+    private List<(string Name, int Count)> GetTop5SoldCoffees()
+    {
+        return _order
+            .GroupBy(o => o.CoffeeName)
+            .Select(group => (Name: group.Key, Count: group.Count()))
+            .OrderByDescending(g => g.Count)
+            .Take(5)
+            .ToList();
+    }
+    // Method to calulate top 5 most sold  AddIns
+    private List<(string Name, int Count)> GetTop5SoldAddIns()
+    {
+        return _order
+            .GroupBy(o => o.AddInsName)
+            .Select(group => (Name: group.Key, Count: group.Count()))
+            .OrderByDescending(g => g.Count)
+            .Take(5)
+            .ToList();
+    }
+
+    private async Task GeneratePDF()
     {
         List<Orders> cus = OrderService.GetAll();
-        decimal revnue = 0;
+
         // Filter orders for the specified date (_date)
         List<Orders> customerDate = cus.Where(x =>
      (x.CreatedAt != null && x.CreatedAt.Date.ToString("dd/MM/yyyy") == (_date.HasValue ? _date.Value.Date.ToString("dd/MM/yyyy") : DateTime.Now.Date.ToString("dd/MM/yyyy")))
      ).ToList();
+
         try
         {
             _addOrderErrorMessage = "";
@@ -179,54 +202,107 @@
             {
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    Document document = new Document();
+                    Document document = new Document(PageSize.A4);
                     PdfWriter.GetInstance(document, memoryStream);
                     document.Open();
 
-                    // Table in the PDF 
-                    PdfPTable table = new PdfPTable(6); // Total 6 Column
+                    // Fonts
+                    BaseFont bfArial = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                    Font fontHeader = new Font(bfArial, 12, Font.BOLD);
+                    Font fontNormal = new Font(bfArial, 10);
 
-                    // Headers to the table
+                    // Company name
+                    Paragraph companyName = new Paragraph("Bislerium Cafe", fontHeader);
+                    companyName.Alignment = Element.ALIGN_CENTER;
+                    document.Add(companyName);
+
+                    // Current date and time
+                    Paragraph dateTime = new Paragraph(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), fontNormal);
+                    dateTime.Alignment = Element.ALIGN_CENTER;
+                    document.Add(dateTime);
+
+                    document.Add(new Paragraph(" "));
+
+                    PdfPTable table = new PdfPTable(5) { WidthPercentage = 100 };
+
+                    // Headers table
                     table.AddCell("Customer Name");
                     table.AddCell("Customer Number");
                     table.AddCell("Coffee");
                     table.AddCell("Add-Ins");
                     table.AddCell("Total");
-                    table.AddCell("Date");
 
+                    // Data rows to the table
+                    decimal totalRevenue = 0m; // 'm' denotes a decimal literal
 
-                    // Rows for each order in customerDate list
                     foreach (var order in customerDate)
                     {
-                        revnue = revnue + Convert.ToDecimal(order.TotalPrice);    //Properties to print in PDF
-                        table.AddCell(order.CustomerName); 
-                        table.AddCell(order.CustomerNumber.ToString()); 
-                        table.AddCell(order.CoffeeName); 
-                        table.AddCell(order.AddInsName); 
-                        table.AddCell(order.TotalPrice); 
-                        table.AddCell(order.CreatedAt.ToString("dd/mm/yyyy")); 
+                        table.AddCell(order.CustomerName);
+                        table.AddCell(order.CustomerNumber.ToString());
+                        table.AddCell(order.CoffeeName);
+                        table.AddCell(order.AddInsName);
+                        table.AddCell(order.TotalPrice);
+
+                        // String TotalPrice to a decimal 
+                        if (decimal.TryParse(order.TotalPrice, out decimal orderTotal))
+                        {
+                            totalRevenue += orderTotal;
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
-                    table.AddCell("");
-                    table.AddCell("Revnue");
-                    table.AddCell("");
-                    table.AddCell("");
-                    table.AddCell(revnue.ToString());
-                    table.AddCell("");
+                    string totalRevenueDisplay = totalRevenue.ToString("");
+
+                    // Add the Total Revenue row to the table
+                    table.AddCell(new PdfPCell(new Phrase("Total Revenue", fontHeader))
+                        {
+                            Colspan = 4,
+                            HorizontalAlignment = Element.ALIGN_RIGHT
+                        });
+                    table.AddCell(new PdfPCell(new Phrase(totalRevenueDisplay, fontHeader))
+                        {
+                            HorizontalAlignment = Element.ALIGN_RIGHT
+                        });
+
                     document.Add(table);
+
+                    document.Add(new Paragraph(" ")); // Add a spacer
+
+                    // Add top 5 sold coffees
+                    List<(string Name, int Count)> topCoffees = GetTop5SoldCoffees();
+                    Paragraph topCoffeesHeader = new Paragraph("Top 5 Coffees", fontHeader);
+                    document.Add(topCoffeesHeader);
+                    foreach (var coffee in topCoffees)
+                    {
+                        document.Add(new Paragraph($"{coffee.Name}: {coffee.Count} times", fontNormal));
+                    }
+
+                    document.Add(new Paragraph(" ")); // Adding a spacer
+
+                    // Add top 5 sold add-ins
+                    List<(string Name, int Count)> topAddIns = GetTop5SoldAddIns();
+                    Paragraph topAddInsHeader = new Paragraph("Top 5 Add-Ins", fontHeader);
+                    document.Add(topAddInsHeader);
+                    foreach (var addIn in topAddIns)
+                    {
+                        document.Add(new Paragraph($"{addIn.Name}: {addIn.Count} times", fontNormal));
+                    }
                     document.Close();
 
                     byte[] bytes = memoryStream.ToArray();
                     memoryStream.Close();
 
 
-                    string fileName = $"DailyReport_{_date?.ToString("yyyyMMdd") ?? DateTime.MinValue.ToString("yyyyMMdd")}.pdf";
+                    string fileName = $"MonthlyReport_{_date?.ToString("yyyyMMdd") ?? DateTime.MinValue.ToString("yyyyMMdd")}.pdf";
 
                     await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(bytes), "application/pdf");
                 }
             }
             else
             {
-                throw new Exception("There is no any data");    //Exception thrown if no date is imput
+                throw new Exception("There is no any data!!!");
             }
         }
         catch (Exception e)
@@ -265,7 +341,7 @@
         Descending
     }
 
-    private void BubbleSort()    //Bubble sort 
+    private void BubbleSort()    //Bubble sort
     {
         List<Orders> cus = OrderService.GetAll();
 
@@ -371,7 +447,7 @@
                     _addInName = "Select AddIns";
                 }
                 else
-                { 
+                {
                     throw new Exception("name or price are empty");   //Exception Handling
                 }
 
