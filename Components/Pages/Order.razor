@@ -168,10 +168,12 @@
     private List<(string Name, int Count)> GetTop5SoldCoffees()
     {
         return _order
+
             .GroupBy(o => o.CoffeeName)
             .Select(group => (Name: group.Key, Count: group.Count()))
             .OrderByDescending(g => g.Count)
             .Take(5)
+
             .ToList();
     }
     // Method to calulate top 5 most sold  AddIns
@@ -243,7 +245,7 @@
                         table.AddCell(order.AddInsName);
                         table.AddCell(order.TotalPrice);
 
-                        // String TotalPrice to a decimal 
+                        // String TotalPrice to a decimal
                         if (decimal.TryParse(order.TotalPrice, out decimal orderTotal))
                         {
                             totalRevenue += orderTotal;
@@ -272,9 +274,16 @@
 
                     // Add top 5 sold coffees
                     List<(string Name, int Count)> topCoffees = GetTop5SoldCoffees();
+                    List<(string Name, int Count)> tC = customerDate.
+                    GroupBy(o => o.CoffeeName)
+            .Select(group => (Name: group.Key, Count: group.Count()))
+            .OrderByDescending(g => g.Count)
+            .Take(5)
+
+            .ToList();
                     Paragraph topCoffeesHeader = new Paragraph("Top 5 Coffees", fontHeader);
                     document.Add(topCoffeesHeader);
-                    foreach (var coffee in topCoffees)
+                    foreach (var coffee in tC)
                     {
                         document.Add(new Paragraph($"{coffee.Name}: {coffee.Count} times", fontNormal));
                     }
@@ -282,7 +291,13 @@
                     document.Add(new Paragraph(" ")); // Adding a spacer
 
                     // Add top 5 sold add-ins
-                    List<(string Name, int Count)> topAddIns = GetTop5SoldAddIns();
+                    List<(string Name, int Count)> topAddIns = customerDate
+
+                    .GroupBy(o => o.AddInsName)
+            .Select(group => (Name: group.Key, Count: group.Count()))
+            .OrderByDescending(g => g.Count)
+            .Take(5)
+            .ToList();
                     Paragraph topAddInsHeader = new Paragraph("Top 5 Add-Ins", fontHeader);
                     document.Add(topAddInsHeader);
                     foreach (var addIn in topAddIns)
@@ -295,7 +310,7 @@
                     memoryStream.Close();
 
 
-                    string fileName = $"MonthlyReport_{_date?.ToString("yyyyMMdd") ?? DateTime.MinValue.ToString("yyyyMMdd")}.pdf";
+                    string fileName = $"DailyReport{_date?.ToString("yyyyMMdd") ?? DateTime.MinValue.ToString("yyyyMMdd")}.pdf";
 
                     await JSRuntime.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(bytes), "application/pdf");
                 }
