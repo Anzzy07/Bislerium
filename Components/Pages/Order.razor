@@ -27,7 +27,6 @@
     </div>
 </nav>
 <div class="d-flex flex-row align-items-center justify-content-between">
-    <!-- Removed mb-3 if navbar already has mb-3 -->
     <div class="d-flex flex-row align-items-center">
         <!-- Sort Dropdown -->
         <div class="dropdown me-2">
@@ -349,7 +348,7 @@
 
     }
 
-    //shorting
+    // Quick Sorting
     private void SortOrders(SortDirection direction)
     {
         if (direction == SortDirection.Ascending)
@@ -369,7 +368,8 @@
         Descending
     }
 
-    private void BubbleSort()    //Bubble sort
+    //Bubble sort
+    private void BubbleSort()    
     {
         List<Orders> cus = OrderService.GetAll();
 
@@ -398,7 +398,8 @@
 
     }
 
-    private void OpenAddCoffeeDialog()    //Add Orders
+    //Add Orders
+    private void OpenAddCoffeeDialog()    
     {
         _dialogTitle = "Add Order";
         _dialogOkLabel = "Add";
@@ -423,8 +424,9 @@
         {
             try
             {
+                //Display Customer data
                 _addOrderErrorMessage = "";
-                if (!string.IsNullOrEmpty(_cusName) && !string.IsNullOrEmpty(_coffName.ToString()))    //Display Customer data
+                if (!string.IsNullOrEmpty(_cusName) && !string.IsNullOrEmpty(_coffName.ToString()))    
                 {
                     List<Orders> ord = OrderService.GetAll();
                     if (string.IsNullOrEmpty(_id.ToString()))
@@ -456,13 +458,16 @@
                         // c.Name = _name;
                         // c.Price = _price;
                     }
-                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))       //using Utility Service
+
+                    //using Utility Service
+                    if (!Directory.Exists(Utility.GetAppDirectoryPath()))       
                     {
                         Directory.CreateDirectory(Utility.GetAppDirectoryPath());
                     }
 
+                    // Read JSON
                     var json = JsonSerializer.Serialize(ord);
-                    File.WriteAllText(Utility.GetAppOrderFilePath(), json);    // Read JSON
+                    File.WriteAllText(Utility.GetAppOrderFilePath(), json);    
                     _order = OrderService.GetAll();
                     _showAddOrderDialog = false;
                     CoffCal = 0;
@@ -489,7 +494,8 @@
         }
     }
 
-    private void OpenEditOrderDialog(Coffees coff)   // Edit Coffe orders
+    // Edit Coffe orders
+    private void OpenEditOrderDialog(Coffees coff)   
     {
         _dialogTitle = "Edit Order";
         _dialogOkLabel = "Update";
@@ -527,7 +533,8 @@
 
     }
 
-    private void CustomerCalculate(ChangeEventArgs e)    //Giving Complementary after purchasing 10 coffee
+    //Giving Complementary after purchasing 10 coffee
+    private void CustomerCalculate(ChangeEventArgs e)    
     {
         _cusNumber = e.Value.ToString().Trim();
         List<Customers> cus = CustomerService.GetAll();
@@ -544,7 +551,8 @@
         }
         else
         {
-            if (_status == "Member")     //Normal Custumer can't have discount
+            //Normal Custumer can't have discount
+            if (_status == "Member")     
             {
                 _discount = "10%";
                 decimal discountAmount = 10m / 100m;
@@ -575,7 +583,9 @@
 
 
     }
-    private void AddInCalculate(ChangeEventArgs e)     //Calculation of Price
+
+    //Calculation of Price
+    private void AddInCalculate(ChangeEventArgs e)     
     {
         _addInName = e.Value.ToString().Trim();
         List<AddIns> a = AddInsService.GetAll();

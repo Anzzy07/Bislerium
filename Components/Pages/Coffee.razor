@@ -12,7 +12,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>         @* TableHead for Coffee Page *@
+            @* TableHead for Coffee Page *@
+            <th>Name</th>         
             <th>Price</th>
             <th>Created At</th>
             <th>Actions</th>
@@ -40,7 +41,8 @@
 </table>
 @if (_showAddCofeeDialog)
 {
-    <ModalDialog Title="@_dialogTitle" OkLabel="@_dialogOkLabel" OnClose="@OnAddCoffeeDialogClose">         @* Using Data from Modal Dialog *@
+    @* Using Data from Modal Dialog *@
+    <ModalDialog Title="@_dialogTitle" OkLabel="@_dialogOkLabel" OnClose="@OnAddCoffeeDialogClose">         
         <form>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control " @bind="_name" placeholder="Name" />
@@ -58,7 +60,8 @@
     </ModalDialog>
 }
 @code {
-    private Guid? _id { get; set; } = null;           // Inport from Coffee.cs
+    // Inport from Coffee.cs
+    private Guid? _id { get; set; } = null;           
     private string _name { get; set; }
     private string _price { get; set; }
     private GlobalState _globalState { get; set; }
@@ -72,7 +75,9 @@
     {
         _coffee = CoffeeService.GetAll();
     }
-    private void OpenAddCoffeeDialog()    /* Add Coffee */
+
+    /* Add Coffee */
+    private void OpenAddCoffeeDialog()    
     {
         _dialogTitle = "Add Coffee";
         _dialogOkLabel = "Add";
@@ -125,8 +130,9 @@
                         Directory.CreateDirectory(Utility.GetAppDirectoryPath());
                     }
 
+                    //Reading JSON File from CoffeeService
                     var json = JsonSerializer.Serialize(coffee);
-                    File.WriteAllText(Utility.GetAppCoffeeFilePath(), json);    //Reading JSON File from CoffeeService
+                    File.WriteAllText(Utility.GetAppCoffeeFilePath(), json);    
                     _coffee = CoffeeService.GetAll();
                     _showAddCofeeDialog = false;
                 }
@@ -159,7 +165,8 @@
     {
         try
         {
-            List<Coffees> coffee = CoffeeService.GetAll();     //Using List to get Service
+            //Using List to get Service
+            List<Coffees> coffee = CoffeeService.GetAll();     
             _id = coff.Id;
             Coffees c = coffee.FirstOrDefault(x => x.Id == _id);
             if (c == null)

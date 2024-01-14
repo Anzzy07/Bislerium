@@ -12,7 +12,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>                  @* Table Headers *@
+            @* Table Headers *@
+            <th>Name</th>                 
             <th>Price</th>
             <th>Created At</th>
             <th>Actions</th>
@@ -71,7 +72,7 @@
 
     protected override void OnInitialized()
     {
-        _addins = AddInsService.GetAll();
+        _addins = AddInsService.GetAll();     //Loads data from addins service
     }
     private void OpenAddinsDialog()
     {
@@ -97,7 +98,7 @@
                 _addAddInsErrorMessage = "";
                 if (!string.IsNullOrEmpty(_name) && !string.IsNullOrEmpty(_price.ToString()))   /* Add Addins */
                 {
-                    List<AddIns> addin = AddInsService.GetAll();
+                    List<AddIns> addin = AddInsService.GetAll();   //Get data with new data
                     if (string.IsNullOrEmpty(_id.ToString()))
                     {
 
@@ -106,7 +107,7 @@
                                 {
                                     Name = _name,
                                     Price = _price,
-                                    CreatedAt = DateTime.Now,
+                                    CreatedAt = DateTime.Now,       //Add data in addin list
                                 }
                             );
 

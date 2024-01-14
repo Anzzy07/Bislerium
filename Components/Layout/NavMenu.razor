@@ -15,40 +15,41 @@
     }
 </style>
 
+@*  Shown only for Staff *@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <div class="nav-item px-3"><h5 class="text-light">Welcome <strong>@Username</strong>!</h5></div>
     <nav class="flex-column">
         <div class="nav-item-custom">
-            <NavLink class="nav-link" href="customers" style="color: lawngreen;">
-                <span class="bi bi-person-fill" style="color: white;"></span> Customer         @*  Shown only for Staff *@
+            <NavLink class="nav-link" href="customers" style="color: goldenrod;">
+                <span class="bi bi-person-fill" style="color: white;"></span>Customer        
             </NavLink>
         </div>
         <div class="nav-item-custom">
-            <NavLink class="nav-link" href="customerorder" style="color: lawngreen;">
+            <NavLink class="nav-link" href="customerorder" style="color: goldenrod;">
                 <span class="bi bi-clipboard2-check-fill" style="color: white;"></span>Order
             </NavLink>
         </div>
         @if (UserRole.ToString() == "Admin")    // Admin Can View Navigation
         {
             <div class="nav-item-custom">
-                <NavLink class="nav-link" href="users" style="color: lawngreen;">
-                    <span class="bi bi-people-fill" style="color: white;"></span> Users
+                <NavLink class="nav-link" href="users" style="color: goldenrod;">
+                    <span class="bi bi-people-fill" style="color: white;"></span>Users
                 </NavLink>
             </div>
             <div class="nav-item-custom">
-                <NavLink class="nav-link" href="coffee" style="color: lawngreen;">
-                    <span class="bi bi-cup-fill" style="color: white;"></span> Coffee
+                <NavLink class="nav-link" href="coffee" style="color: goldenrod;">
+                    <span class="bi bi-cup-fill" style="color: white;"></span>Coffee
                 </NavLink>
             </div>
             <div class="nav-item-custom">
-                <NavLink class="nav-link" href="add-ins" style="color: lawngreen;">
-                    <span class="bi bi-plus-circle-fill" style="color: white;"></span> Add-ins
+                <NavLink class="nav-link" href="add-ins" style="color: goldenrod;">
+                    <span class="bi bi-plus-circle-fill" style="color: white;"></span>Add-ins
                 </NavLink>
             </div>
         }
         <div class="nav-item-custom">
             <NavLink class="nav-link text-danger" role="button" @onclick="LogoutHandler">
-                <span class="bi bi-box-arrow-right" /> Logout
+                <span class="bi bi-box-arrow-right" />Logout
             </NavLink>
         </div>
 
@@ -59,8 +60,9 @@
     public string Username { get; set; }
     [Parameter]
     public Role UserRole { get; set; }
+    // EventCall back for logout
     [Parameter]
-    public EventCallback LogoutHandler { get; set; }    // EventCall back for logout
+    public EventCallback LogoutHandler { get; set; }   
 
     private bool _collapseNavMenu { get; set; } = true;
 
